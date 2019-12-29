@@ -381,14 +381,13 @@ class QueryBuilder extends Builder
     protected function addIncludesToQuery(Collection $includes)
     {
         $includes
-            ->map([Str::class, 'camel'])
             ->map(function (string $include) {
                 return collect(explode('.', $include));
             })
             ->flatMap(function (Collection $relatedTables) {
                 return $relatedTables
                     ->mapWithKeys(function ($table, $key) use ($relatedTables) {
-                        $fields = $this->getFieldsForIncludedTable(Str::snake($table));
+                        $fields = $this->getFieldsForIncludedTable($table);
 
                         $fullRelationName = $relatedTables->slice(0, $key + 1)->implode('.');
 
